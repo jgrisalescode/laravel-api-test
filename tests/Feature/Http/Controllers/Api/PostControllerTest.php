@@ -27,4 +27,15 @@ class PostControllerTest extends TestCase
         // We want to know if in the database we have saved the request
         $this->assertDatabaseHas('posts', ['title' => 'Test title']);
     }
+
+    public function test_validate_title()
+    {
+        // Sending a request without title
+        $response = $this->json('POST', '/api/posts', [
+            'title' => ''
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors('title');
+    }
 }
